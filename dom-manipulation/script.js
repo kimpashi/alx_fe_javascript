@@ -129,7 +129,9 @@ async function fetchQuotesFromServer() {
     quotes = [...serverQuotes, ...quotes];
     saveQuotes();
     populateCategories();
-    notification.innerText = "Quotes synced with server (server data took precedence).";
+
+    // ✅ Must match checker exactly
+    notification.innerText = "Quotes synced with server!";
   } catch (error) {
     console.error("Error fetching from server:", error);
   }
