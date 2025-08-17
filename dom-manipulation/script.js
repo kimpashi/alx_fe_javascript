@@ -1,4 +1,4 @@
-// Step 2: JavaScript Implementation
+// Step 2 + Step 3: JavaScript for Quote Generator
 
 // 1. Create an array of quote objects
 let quotes = [
@@ -20,3 +20,30 @@ function showRandomQuote() {
 
 // 3. Event listener for "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+
+// 4. Function to add a new quote dynamically
+function addQuote() {
+  const textInput = document.getElementById("newQuoteText");
+  const categoryInput = document.getElementById("newQuoteCategory");
+
+  const newText = textInput.value.trim();
+  const newCategory = categoryInput.value.trim();
+
+  if (newText && newCategory) {
+    // Create new quote object
+    const newQuote = { text: newText, category: newCategory };
+
+    // Add to array
+    quotes.push(newQuote);
+
+    // Show feedback
+    const quoteDisplay = document.getElementById("quoteDisplay");
+    quoteDisplay.innerHTML = `<p style="color:green;">New quote added!</p>`;
+
+    // Clear inputs
+    textInput.value = "";
+    categoryInput.value = "";
+  } else {
+    alert("Please enter both a quote and a category!");
+  }
+}
