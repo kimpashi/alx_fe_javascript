@@ -30,20 +30,41 @@ function addQuote() {
   const newCategory = categoryInput.value.trim();
 
   if (newText && newCategory) {
-    // Create new quote object
     const newQuote = { text: newText, category: newCategory };
-
-    // Add to array
     quotes.push(newQuote);
 
-    // Show feedback
     const quoteDisplay = document.getElementById("quoteDisplay");
     quoteDisplay.innerHTML = `<p style="color:green;">New quote added!</p>`;
 
-    // Clear inputs
     textInput.value = "";
     categoryInput.value = "";
   } else {
     alert("Please enter both a quote and a category!");
   }
 }
+
+// 5. Function to dynamically create the Add Quote form
+function createAddQuoteForm() {
+  const formContainer = document.getElementById("formContainer");
+
+  const textInput = document.createElement("input");
+  textInput.id = "newQuoteText";
+  textInput.type = "text";
+  textInput.placeholder = "Enter a new quote";
+
+  const categoryInput = document.createElement("input");
+  categoryInput.id = "newQuoteCategory";
+  categoryInput.type = "text";
+  categoryInput.placeholder = "Enter quote category";
+
+  const addButton = document.createElement("button");
+  addButton.textContent = "Add Quote";
+  addButton.addEventListener("click", addQuote);
+
+  formContainer.appendChild(textInput);
+  formContainer.appendChild(categoryInput);
+  formContainer.appendChild(addButton);
+}
+
+// Call the function on page load
+createAddQuoteForm();
