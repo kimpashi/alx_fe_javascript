@@ -1,32 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Quote Generator</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { margin-bottom: .25rem; }
+    small { color: #666; }
+    .row { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+    .stack { display: grid; gap: .75rem; }
+    #quoteDisplay { margin: 1rem 0; padding: .75rem 1rem; border: 1px solid #e2e2e2; border-radius: .5rem; min-height: 48px; }
+    button { cursor: pointer; border: 1px solid #d0d0d0; background: #fafafa; padding: .5rem .75rem; border-radius: .5rem; }
+    button:hover { background: #f0f0f0; }
+    input, select { padding: .5rem; border: 1px solid #d0d0d0; border-radius: .5rem; }
+    .banner { padding: .6rem .8rem; border-radius: .5rem; }
+    .banner.info { background: #eef6ff; border: 1px solid #cfe5ff; }
+    .banner.warn { background: #fff7e6; border: 1px solid #ffe3a3; }
+    .muted { color: #666; }
+    .hidden { display: none; }
+    .list { display: grid; gap: .5rem; }
+    .card { border: 1px solid #e2e2e2; border-radius: .6rem; padding: .6rem .8rem; background: #fff; }
+    .pill { font-size: .8rem; padding: .1rem .4rem; border: 1px solid #ddd; border-radius: 999px; background: #f8f8f8; }
+    .space { height: 1rem; }
+    .divider { border-top: 1px dashed #e0e0e0; margin: .75rem 0; }
+    .right { margin-left: auto; }
+  </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
+  <small class="muted">Parts 1–4: DOM, Storage, JSON Import/Export, Server Sync + Conflicts</small>
 
   <!-- Category Filter -->
-  <label for="categoryFilter">Filter by Category:</label>
-  <select id="categoryFilter" onchange="filterQuotes()">
-    <option value="all">All Categories</option>
-  </select>
+  <div class="space"></div>
+  <div class="row">
+    <label for="categoryFilter">Filter:</label>
+    <select id="categoryFilter" onchange="filterQuotes()">
+      <option value="all">All Categories</option>
+    </select>
+
+    <button id="newQuote">Show New Quote</button>
+    <span class="muted" id="lastViewedInfo"></span>
+  </div>
 
   <!-- Quote Display -->
   <div id="quoteDisplay"></div>
-  <button id="newQuote">Show New Quote</button>
 
-  <!-- Placeholder for Add Quote Form (built dynamically) -->
-  <div id="formContainer"></div>
+  <!-- Add Quote Form (built dynamically) -->
+  <div class="stack">
+    <h3>Add a New Quote</h3>
+    <div id="formContainer" class="row"></div>
+  </div>
 
-  <h2>Import / Export Quotes</h2>
-  <!-- Export Button -->
-  <button onclick="exportToJsonFile()">Export Quotes (JSON)</button>
-  
-  <!-- Import Input -->
-  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+  <div class="divider"></div>
+
+  <!-- Import / Export -->
+  <div class="stack">
+    <h3>Import / Export Quotes</h3>
+    <div class="row">
+      <button onclick="exportToJsonFile()">Export Quotes (JSON)</button>
+      <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Sync with Server -->
+  <div class="stack">
+    <h3>Server Sync (Simulated)</h3>
+    <div id="syncBanner" class="banner info hidden"></div>
+    <div class="row">
+      <button id="syncNow">Sync Now</button>
+      <button id="toggleAutoSync">Auto Sync: Off</button>
+      <span class="muted" id="lastSyncInfo"></span>
+      <span class="right muted">Server: JSONPlaceholder</span>
+    </div>
+
+    <!-- Conflicts UI -->
+    <div id="conflictBanner" class="banner warn hidden"></div>
+    <div id="conflictList" class="list hidden"></div>
+  </div>
 
   <script src="script.js"></script>
 </body>
