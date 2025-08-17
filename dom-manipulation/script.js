@@ -53,7 +53,7 @@ function addQuote() {
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
     notification.innerText = "Quote added locally. Will sync with server...";
-    postQuoteToServer(newQuote); // Sync to server
+    postQuoteToServer(newQuote); // sync new quote
   } else {
     alert("Please enter both text and category.");
   }
@@ -70,7 +70,6 @@ function populateCategories() {
     categoryFilter.appendChild(option);
   });
 
-  // Restore last filter
   const savedFilter = localStorage.getItem("lastCategoryFilter");
   if (savedFilter) {
     categoryFilter.value = savedFilter;
@@ -79,7 +78,6 @@ function populateCategories() {
 
 // Filter Quotes
 function filterQuotes() {
-  saveQuotes(); // persist current data
   localStorage.setItem("lastCategoryFilter", categoryFilter.value);
   showRandomQuote();
 }
@@ -112,7 +110,7 @@ function importFromJsonFile(event) {
 
 // ---- Part 4: Server Sync ----
 
-// Mock API URL (using JSONPlaceholder posts as example)
+// Mock API URL
 const SERVER_URL = "https://jsonplaceholder.typicode.com/posts";
 
 // Fetch quotes from server
@@ -120,17 +118,18 @@ async function fetchQuotesFromServer() {
   try {
     const response = await fetch(SERVER_URL);
     const data = await response.json();
-    // Simulate server quotes format
+
+    // Simulate server quotes
     const serverQuotes = data.slice(0, 5).map(item => ({
       text: item.title,
       category: "Server"
     }));
 
-    // Conflict resolution: Server takes precedence
+    // Conflict resolution: Server wins
     quotes = [...serverQuotes, ...quotes];
     saveQuotes();
     populateCategories();
-    notification.innerText = "Quotes synced with server (server wins).";
+    notification.innerText = "Quotes synced with server (server data took precedence).";
   } catch (error) {
     console.error("Error fetching from server:", error);
   }
@@ -142,7 +141,9 @@ async function postQuoteToServer(quote) {
     await fetch(SERVER_URL, {
       method: "POST",
       body: JSON.stringify(quote),
-      headers: { "Content-type": "application/json; charset=UTF-8" }
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8"   // <-- FIXED CASE
+      }
     });
     notification.innerText = "Quote synced to server successfully!";
   } catch (error) {
@@ -156,7 +157,7 @@ async function syncQuotes() {
   await fetchQuotesFromServer();
 }
 
-// Periodic sync (every 30 seconds)
+// Periodic sync (every 30s)
 setInterval(syncQuotes, 30000);
 
 // Initialize App
